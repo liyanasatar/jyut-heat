@@ -1,0 +1,113 @@
+.page {
+  min-height: 100dvh;
+  padding: clamp(1.5rem, 5vw, 3rem);
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  margin: 0;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  color: var(--jade);
+  font-weight: 700;
+}
+
+.title {
+  margin: 0.35rem 0 1.5rem;
+  font-size: clamp(2.2rem, 8vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.05;
+}
+
+.scoreBlock {
+  margin-bottom: 1.5rem;
+}
+
+.scoreLabel {
+  margin: 0;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.score {
+  margin: 0.2rem 0 0;
+  font-size: clamp(3rem, 12vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--vermillion);
+}
+
+.best {
+  margin: 0.4rem 0 0;
+  font-weight: 700;
+  color: var(--mustard);
+}
+
+.meta {
+  list-style: none;
+  margin: 0 0 1.25rem;
+  padding: 0;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.meta li {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.55rem;
+  border-bottom: 1px solid var(--mist);
+  font-size: 0.98rem;
+}
+
+.meta span {
+  opacity: 0.7;
+}
+
+.unlock {
+  margin: 0 0 0.75rem;
+  padding: 0.75rem 0.9rem;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--jade) 14%, var(--cream));
+  color: var(--jade);
+  font-weight: 700;
+}
+
+.reviewNote {
+  margin: 0 0 1.25rem;
+  color: var(--ink-soft);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.5rem;
+}
+
+.primary,
+.secondary,
+.ghost {
+  padding: 0.9rem 1.1rem;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  text-align: center;
+}
+
+.primary {
+  background: var(--vermillion);
+  color: var(--cream);
+}
+
+.secondary {
+  background: var(--cream);
+  border: 1.5px solid var(--mist);
+}
+
+.ghost {
+  opacity: 0.7;
+}

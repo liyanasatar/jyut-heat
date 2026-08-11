@@ -1,0 +1,23 @@
+.page {
+  min-height: 100dvh;
+  padding: 1rem clamp(1rem, 4vw, 2rem) 2rem;
+  background:
+    linear-gradient(180deg, var(--paper-deep), var(--paper) 40%);
+}
+
+.top {
+  width: min(100%, 640px);
+  margin: 0 auto 0.5rem;
+}
+
+.quit {
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  opacity: 0.65;
+}
+
+.quit:hover {
+  opacity: 1;
+  color: var(--vermillion);
+}

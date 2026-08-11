@@ -1,0 +1,104 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: min(100%, 560px);
+  margin: 0 auto;
+}
+
+.promptLabel {
+  margin: 0;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  opacity: 0.75;
+}
+
+.prompt {
+  margin: 0;
+  font-size: clamp(1.45rem, 4vw, 2rem);
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.pulseTrack {
+  height: 6px;
+  border-radius: 999px;
+  background: var(--mist);
+  overflow: hidden;
+  transform-origin: left center;
+}
+
+.pulseFill {
+  height: 100%;
+  width: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, var(--vermillion), var(--mustard));
+  transform-origin: left center;
+  animation-name: pulse-drain;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+.combo {
+  align-self: flex-start;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+  background: var(--vermillion);
+  color: var(--cream);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+@media (max-width: 520px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  padding: 1rem 1.05rem;
+  border-radius: var(--radius-md);
+  background: var(--cream);
+  border: 2px solid transparent;
+  box-shadow: 0 1px 0 var(--shadow);
+  text-align: left;
+  transition: border-color 160ms ease, transform 160ms var(--ease-snap);
+}
+
+.option:hover:not(:disabled) {
+  border-color: var(--jade);
+  transform: translateY(-1px);
+}
+
+.optionGood {
+  border-color: var(--jade);
+  background: color-mix(in srgb, var(--jade) 12%, var(--cream));
+}
+
+.optionReveal {
+  border-color: var(--jade);
+}
+
+.optionDim {
+  opacity: 0.45;
+}
+
+.roman {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+}

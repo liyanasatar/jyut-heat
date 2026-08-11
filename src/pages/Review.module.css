@@ -1,0 +1,91 @@
+.page {
+  min-height: 100dvh;
+  padding: clamp(1.25rem, 4vw, 2.5rem);
+  max-width: 560px;
+  margin: 0 auto;
+}
+
+.back {
+  margin-bottom: 1rem;
+  font-weight: 700;
+  opacity: 0.65;
+}
+
+.eyebrow {
+  margin: 0;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--vermillion);
+  font-weight: 700;
+}
+
+.title {
+  margin: 0.35rem 0 0.75rem;
+  font-size: clamp(2rem, 7vw, 2.8rem);
+  font-weight: 800;
+}
+
+.prompt {
+  margin: 0;
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.progress {
+  margin: 0.5rem 0 1.25rem;
+  opacity: 0.65;
+  font-size: 0.9rem;
+}
+
+.grid {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.2rem;
+  padding: 0.95rem 1rem;
+  border-radius: var(--radius-md);
+  background: var(--cream);
+  border: 2px solid transparent;
+  text-align: left;
+}
+
+.option:hover:not(:disabled) {
+  border-color: var(--jade);
+}
+
+.good {
+  border-color: var(--jade);
+  background: color-mix(in srgb, var(--jade) 12%, var(--cream));
+}
+
+.reveal {
+  border-color: var(--jade);
+}
+
+.roman {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.empty {
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+.primary {
+  margin-top: 1rem;
+  padding: 0.9rem 1.2rem;
+  border-radius: var(--radius-md);
+  background: var(--vermillion);
+  color: var(--cream);
+  font-weight: 700;
+}
