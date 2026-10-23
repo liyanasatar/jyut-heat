@@ -17,9 +17,10 @@
 
 .prompt {
   margin: 0;
-  font-size: clamp(1.45rem, 4vw, 2rem);
-  font-weight: 700;
-  line-height: 1.25;
+  font-size: clamp(1.85rem, 6.5vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.2;
+  max-width: 16ch;
 }
 
 .pulseTrack {
@@ -51,6 +52,74 @@
   font-size: 0.9rem;
 }
 
+.missBanner {
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--vermillion) 14%, var(--cream));
+  border: 3px solid var(--vermillion-deep);
+  box-shadow: 4px 4px 0 rgba(158, 12, 36, 0.4);
+  animation: snap-in 320ms var(--ease-snap);
+}
+
+.missLabel {
+  margin: 0 0 0.25rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 900;
+  color: var(--vermillion-deep);
+}
+
+.missZh {
+  margin: 0;
+  font-family: var(--font-zh);
+  font-size: 1.55rem;
+  font-weight: 900;
+  line-height: 1.25;
+  color: var(--vermillion-deep);
+}
+
+.missRoman {
+  margin: 0.25rem 0 0;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.goodBanner {
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--jade) 16%, var(--cream));
+  border: 3px solid var(--jade);
+  box-shadow: 4px 4px 0 rgba(31, 122, 92, 0.35);
+  animation: snap-in 320ms var(--ease-snap);
+}
+
+.goodLabel {
+  margin: 0 0 0.25rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 900;
+  color: var(--jade);
+}
+
+.goodZh {
+  margin: 0;
+  font-family: var(--font-zh);
+  font-size: 1.55rem;
+  font-weight: 900;
+  line-height: 1.25;
+  color: var(--jade);
+}
+
+.goodRoman {
+  margin: 0.25rem 0 0;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -69,36 +138,72 @@
   align-items: flex-start;
   gap: 0.25rem;
   padding: 1rem 1.05rem;
-  border-radius: var(--radius-md);
+  border-radius: 14px;
   background: var(--cream);
-  border: 2px solid transparent;
-  box-shadow: 0 1px 0 var(--shadow);
+  border: 2.5px solid var(--ink);
+  box-shadow: 3px 3px 0 rgba(200, 16, 46, 0.28);
   text-align: left;
-  transition: border-color 160ms ease, transform 160ms var(--ease-snap);
+  transition: border-color 160ms ease, transform 160ms var(--ease-snap), box-shadow 160ms var(--ease-snap);
 }
 
 .option:hover:not(:disabled) {
-  border-color: var(--jade);
-  transform: translateY(-1px);
+  border-color: var(--ink);
+  transform: translate(-1px, -1px);
+  box-shadow: 4px 4px 0 var(--jade);
 }
 
 .optionGood {
   border-color: var(--jade);
-  background: color-mix(in srgb, var(--jade) 12%, var(--cream));
+  border-width: 3px;
+  background: color-mix(in srgb, var(--jade) 22%, var(--cream));
+  box-shadow: 4px 4px 0 rgba(31, 122, 92, 0.4);
+}
+
+.optionGood .zh {
+  color: var(--jade);
+  font-weight: 900;
+}
+
+.optionGood .roman {
+  color: var(--ink);
+  font-weight: 800;
 }
 
 .optionReveal {
-  border-color: var(--jade);
+  border-color: var(--vermillion-deep);
+  border-width: 3px;
+  background: color-mix(in srgb, var(--vermillion) 18%, var(--cream));
+  box-shadow: 4px 4px 0 rgba(158, 12, 36, 0.4);
+}
+
+.optionReveal .zh {
+  color: var(--vermillion-deep);
+  font-weight: 900;
+}
+
+.optionReveal .roman {
+  color: var(--ink);
+  font-weight: 800;
 }
 
 .optionDim {
-  opacity: 0.45;
+  opacity: 0.4;
+  border-color: color-mix(in srgb, var(--ink) 25%, transparent);
+  box-shadow: none;
 }
 
 .roman {
   font-family: var(--font-display);
-  font-size: 1.05rem;
+  font-size: 0.88rem;
   font-weight: 700;
   line-height: 1.35;
   letter-spacing: 0.01em;
+  color: var(--ink-soft);
+}
+
+.zh {
+  font-family: var(--font-zh);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.3;
 }

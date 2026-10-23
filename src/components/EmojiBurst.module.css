@@ -1,0 +1,75 @@
+.layer {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Outer: soft gravity fall */
+.flake {
+  position: absolute;
+  transform: translateX(-50%);
+  animation: steam-fall var(--fall-dur, 1.4s) cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  animation-delay: var(--delay, 0ms);
+  will-change: transform, opacity;
+}
+
+/* Inner: lazy side-to-side + rock (independent of fall) */
+.emoji {
+  display: inline-block;
+  font-size: clamp(1.7rem, 6.5vw, 2.5rem);
+  line-height: 1;
+  /* Cream halo + ink edge so glyphs don’t dissolve into the yellow page */
+  filter:
+    drop-shadow(0 0 0.55px #faf6f0)
+    drop-shadow(0 0 1.5px #faf6f0)
+    drop-shadow(0 0 3px rgba(250, 246, 240, 0.95))
+    drop-shadow(0 2px 0 rgba(26, 23, 20, 0.35))
+    drop-shadow(0 6px 10px rgba(26, 23, 20, 0.22));
+  animation: steam-sway var(--sway-dur, 1.5s) cubic-bezier(0.45, 0.05, 0.55, 0.95) both;
+  animation-delay: calc(var(--delay, 0ms) + var(--sway-phase, 0ms));
+  will-change: transform, filter;
+}
+
+.good,
+.miss {
+  opacity: 0.95;
+}
+
+@keyframes steam-fall {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-8px) scale(0.8);
+  }
+  12% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(3vh) scale(1.05);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(60vh) scale(0.9);
+  }
+}
+
+/* Uneven peaks so it doesn't look like a metronome */
+@keyframes steam-sway {
+  0% {
+    transform: translateX(0) rotate(-5deg);
+  }
+  18% {
+    transform: translateX(var(--steam-drift)) rotate(8deg);
+  }
+  41% {
+    transform: translateX(calc(var(--steam-drift) * -0.78)) rotate(-7deg);
+  }
+  63% {
+    transform: translateX(calc(var(--steam-drift) * 0.48)) rotate(5deg);
+  }
+  84% {
+    transform: translateX(calc(var(--steam-drift) * -0.28)) rotate(-3deg);
+  }
+  100% {
+    transform: translateX(calc(var(--steam-drift) * 0.12)) rotate(2deg);
+  }
+}

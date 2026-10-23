@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import type { Progress } from '../game/progress'
 import { getPhraseById, buildOptions, phrasesForLevels } from '../game/runEngine'
 import { LEVEL_ORDER } from '../data/content'
+import { EmojiBurst } from '../components/EmojiBurst'
 import styles from './Review.module.css'
 
 type Props = {
@@ -21,6 +22,7 @@ export function Review({ progress, onCorrect, onMiss, onBack }: Props) {
     [phrase, pool],
   )
   const [feedback, setFeedback] = useState<'idle' | 'correct' | 'miss'>('idle')
+  const [burstKey, setBurstKey] = useState(0)
 
   if (!current || !phrase) {
     return (
@@ -40,15 +42,20 @@ export function Review({ progress, onCorrect, onMiss, onBack }: Props) {
     if (feedback !== 'idle' || !phrase) return
     const ok = id === phrase.id
     setFeedback(ok ? 'correct' : 'miss')
+    setBurstKey((k) => k + 1)
     window.setTimeout(() => {
       if (ok) onCorrect(phrase.id)
       else onMiss(phrase.id)
       setFeedback('idle')
-    }, ok ? 450 : 2200)
+    }, ok ? 1200 : 4200)
   }
 
   return (
     <div className={`${styles.page} anim-snap`}>
+      <EmojiBurst
+        kind={feedback === 'idle' ? null : feedback === 'correct' ? 'good' : 'miss'}
+        burstKey={`${phrase.id}-${burstKey}`}
+      />
       <button type="button" className={styles.back} onClick={onBack}>
         ← Home
       </button>
@@ -61,6 +68,22 @@ export function Review({ progress, onCorrect, onMiss, onBack }: Props) {
         Streak on this one: {current.correctStreak}/2
       </p>
 
+      {feedback === 'correct' && (
+        <div className={styles.goodBanner} aria-live="polite">
+          <p className={styles.goodLabel}>Correct</p>
+          <p className={styles.goodZh}>{phrase.zh}</p>
+          <p className={styles.goodRoman}>{phrase.jyutping}</p>
+        </div>
+      )}
+
+      {feedback === 'miss' && (
+        <div className={styles.missBanner} aria-live="polite">
+          <p className={styles.missLabel}>Correct answer</p>
+          <p className={styles.missZh}>{phrase.zh}</p>
+          <p className={styles.missRoman}>{phrase.jyutping}</p>
+        </div>
+      )}
+
       <div className={styles.grid}>
         {options.map((opt) => (
           <button
@@ -72,6 +95,7 @@ export function Review({ progress, onCorrect, onMiss, onBack }: Props) {
             onClick={() => choose(opt.id)}
             disabled={feedback !== 'idle'}
           >
+            <span className={styles.zh}>{opt.zh}</span>
             <span className={styles.roman}>{opt.jyutping}</span>
           </button>
         ))}

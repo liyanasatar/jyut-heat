@@ -5,7 +5,6 @@ import {
   SCENE_EVERY_N,
   levelsAvailable,
   scoreForAnswer,
-  xpFromScore,
 } from '../game/scoring'
 import {
   buildOptions,
@@ -19,10 +18,9 @@ import { SceneBuilder } from '../components/SceneBuilder'
 import styles from './Run.module.css'
 
 type Props = {
-  totalXp: number
+  runsCompleted: number
   onFinish: (partial: {
     score: number
-    xpGained: number
     comboPeak: number
     correct: number
     total: number
@@ -33,11 +31,14 @@ type Props = {
 
 type Mode = 'match' | 'scene'
 
-export function Run({ totalXp, onFinish, onQuit }: Props) {
-  const deck = useMemo(() => pickRunPhrases(totalXp, MATCHES_PER_RUN), [totalXp])
+export function Run({ runsCompleted, onFinish, onQuit }: Props) {
+  const deck = useMemo(
+    () => pickRunPhrases(runsCompleted, MATCHES_PER_RUN),
+    [runsCompleted],
+  )
   const pool = useMemo(
-    () => phrasesForLevels(levelsAvailable(totalXp)),
-    [totalXp],
+    () => phrasesForLevels(levelsAvailable(runsCompleted)),
+    [runsCompleted],
   )
 
   const [index, setIndex] = useState(0)
@@ -61,7 +62,6 @@ export function Run({ totalXp, onFinish, onQuit }: Props) {
     (finalScore: number, finalComboPeak: number, correct: number, missed: string[]) => {
       onFinish({
         score: finalScore,
-        xpGained: xpFromScore(finalScore),
         comboPeak: finalComboPeak,
         correct,
         total: deck.length,
@@ -72,13 +72,20 @@ export function Run({ totalXp, onFinish, onQuit }: Props) {
   )
 
   const advanceAfterMatch = useCallback(
-    (nextScore: number, nextComboPeak: number, nextCorrect: number, nextMissed: string[], nextMatchesDone: number, nextIndex: number) => {
+    (
+      nextScore: number,
+      nextComboPeak: number,
+      nextCorrect: number,
+      nextMissed: string[],
+      nextMatchesDone: number,
+      nextIndex: number,
+    ) => {
       if (nextMatchesDone >= deck.length) {
         finish(nextScore, nextComboPeak, nextCorrect, nextMissed)
         return
       }
       if (nextMatchesDone > 0 && nextMatchesDone % SCENE_EVERY_N === 0) {
-        const s = pickScene(totalXp, usedScenes)
+        const s = pickScene(runsCompleted, usedScenes)
         if (s) {
           setUsedScenes((prev) => new Set(prev).add(s.id))
           setScene(s)
@@ -90,7 +97,7 @@ export function Run({ totalXp, onFinish, onQuit }: Props) {
       setIndex(nextIndex)
       setMode('match')
     },
-    [deck.length, finish, totalXp, usedScenes],
+    [deck.length, finish, runsCompleted, usedScenes],
   )
 
   const onAnswer = useCallback(

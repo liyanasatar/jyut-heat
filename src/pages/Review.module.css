@@ -39,6 +39,72 @@
   font-size: 0.9rem;
 }
 
+.missBanner {
+  margin-bottom: 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--vermillion) 14%, var(--cream));
+  border: 3px solid var(--vermillion-deep);
+  box-shadow: 4px 4px 0 rgba(158, 12, 36, 0.4);
+}
+
+.missLabel {
+  margin: 0 0 0.25rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 900;
+  color: var(--vermillion-deep);
+}
+
+.missZh {
+  margin: 0;
+  font-family: var(--font-zh);
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--vermillion-deep);
+}
+
+.missRoman {
+  margin: 0.25rem 0 0;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
+.goodBanner {
+  margin-bottom: 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--jade) 16%, var(--cream));
+  border: 3px solid var(--jade);
+  box-shadow: 4px 4px 0 rgba(31, 122, 92, 0.35);
+}
+
+.goodLabel {
+  margin: 0 0 0.25rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 900;
+  color: var(--jade);
+}
+
+.goodZh {
+  margin: 0;
+  font-family: var(--font-zh);
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--jade);
+}
+
+.goodRoman {
+  margin: 0.25rem 0 0;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--ink);
+}
+
 .grid {
   display: grid;
   gap: 0.65rem;
@@ -62,18 +128,51 @@
 
 .good {
   border-color: var(--jade);
-  background: color-mix(in srgb, var(--jade) 12%, var(--cream));
+  border-width: 3px;
+  background: color-mix(in srgb, var(--jade) 22%, var(--cream));
+  box-shadow: 4px 4px 0 rgba(31, 122, 92, 0.35);
+}
+
+.good .zh {
+  color: var(--jade);
+  font-weight: 900;
+}
+
+.good .roman {
+  color: var(--ink);
+  font-weight: 800;
 }
 
 .reveal {
-  border-color: var(--jade);
+  border-color: var(--vermillion-deep);
+  border-width: 3px;
+  background: color-mix(in srgb, var(--vermillion) 18%, var(--cream));
+  box-shadow: 4px 4px 0 rgba(158, 12, 36, 0.4);
+}
+
+.reveal .zh {
+  color: var(--vermillion-deep);
+  font-weight: 900;
+}
+
+.reveal .roman {
+  color: var(--ink);
+  font-weight: 800;
 }
 
 .roman {
   font-family: var(--font-display);
-  font-size: 1.05rem;
+  font-size: 0.88rem;
   font-weight: 700;
   line-height: 1.35;
+  color: var(--ink-soft);
+}
+
+.zh {
+  font-family: var(--font-zh);
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.3;
 }
 
 .empty {

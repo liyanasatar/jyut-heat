@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jyut Heat — D3 shop neon</title>
+    <style>
+      :root {
+        color: #1a1714;
+        font-family: system-ui, sans-serif;
+        background: #f3ebe0;
+      }
+      body {
+        margin: 0;
+        padding: 1.25rem;
+      }
+      h1 {
+        margin: 0 0 0.35rem;
+        font-size: 1.5rem;
+      }
+      p {
+        margin: 0 0 1rem;
+        opacity: 0.8;
+        line-height: 1.45;
+      }
+      .wrap {
+        display: grid;
+        gap: 1.25rem;
+        max-width: 920px;
+        margin: 0 auto;
+      }
+      @media (min-width: 860px) {
+        .wrap {
+          grid-template-columns: 360px 1fr;
+          align-items: start;
+        }
+      }
+      figure {
+        margin: 0;
+        background: #fff;
+        border: 3px solid #1a1714;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 4px 4px 0 #c8102e;
+      }
+      img {
+        display: block;
+        width: 100%;
+        height: auto;
+        aspect-ratio: 9 / 16;
+        object-fit: cover;
+      }
+      figcaption {
+        padding: 0.85rem 1rem 1rem;
+        font-weight: 700;
+      }
+      a.back {
+        display: inline-block;
+        margin-bottom: 1rem;
+        font-weight: 700;
+        color: #c8102e;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        background: #fff;
+        border: 2.5px solid #1a1714;
+        border-radius: 12px;
+        overflow: hidden;
+      }
+      th,
+      td {
+        text-align: left;
+        padding: 0.65rem 0.8rem;
+        border-bottom: 1px solid rgba(26, 23, 20, 0.1);
+        vertical-align: top;
+      }
+      th {
+        background: #1a1714;
+        color: #faf6f0;
+      }
+      tr:last-child td {
+        border-bottom: none;
+      }
+      .zh {
+        font-weight: 800;
+        font-size: 1.15rem;
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+  <body>
+    <a class="back" href="/">← Back to app</a>
+    <h1>D3 — neon shop backdrop</h1>
+    <p>
+      No people, no dragon — just neon signs on a shop front. This is also set as
+      your current home hero. Refresh the app to see it.
+    </p>
+    <div class="wrap">
+      <figure>
+        <img src="/hero-options/d3-shop-neon.png" alt="D3 neon shop backdrop" />
+        <figcaption>D3 — language neon shop wall</figcaption>
+      </figure>
+      <div>
+        <h1>Every sign</h1>
+        <table>
+          <thead>
+            <tr>
+              <th>Sign</th>
+              <th>Meaning</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="zh">廣東話</td>
+              <td>Cantonese (the language)</td>
+            </tr>
+            <tr>
+              <td class="zh">學廣東話</td>
+              <td>Learn Cantonese</td>
+            </tr>
+            <tr>
+              <td class="zh">粵語</td>
+              <td>Cantonese (another common name)</td>
+            </tr>
+            <tr>
+              <td class="zh">熱口</td>
+              <td>Jyut Heat — our game name (“hot mouth” / warmed-up speaking)</td>
+            </tr>
+            <tr>
+              <td class="zh">你好</td>
+              <td>Hello</td>
+            </tr>
+            <tr>
+              <td class="zh">早晨</td>
+              <td>Good morning</td>
+            </tr>
+            <tr>
+              <td class="zh">多謝</td>
+              <td>Thank you (for gifts / big thanks)</td>
+            </tr>
+            <tr>
+              <td class="zh">唔該</td>
+              <td>Please / thanks / excuse me (everyday polite)</td>
+            </tr>
+            <tr>
+              <td class="zh">講嘢</td>
+              <td>Talk / speak</td>
+            </tr>
+            <tr>
+              <td class="zh">加油</td>
+              <td>Keep going! / You got this</td>
+            </tr>
+            <tr>
+              <td class="zh">茶餐廳</td>
+              <td>Hong Kong café (cha chaan teng)</td>
+            </tr>
+            <tr>
+              <td class="zh">好味</td>
+              <td>Delicious</td>
+            </tr>
+            <tr>
+              <td class="zh">飲茶</td>
+              <td>Yum cha / go for tea & dim sum</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

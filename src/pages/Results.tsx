@@ -1,5 +1,6 @@
 import { LEVEL_LABELS } from '../data/content'
 import type { RunResult } from '../game/progress'
+import { unlockProgress } from '../game/scoring'
 import styles from './Results.module.css'
 
 type Props = {
@@ -11,6 +12,7 @@ type Props = {
 
 export function Results({ result, onHome, onReview, onAgain }: Props) {
   const leveledUp = result.unlockedLevel !== result.previousLevel
+  const progress = unlockProgress(result.runsCompleted)
 
   return (
     <div className={`${styles.page} anim-snap`}>
@@ -25,10 +27,6 @@ export function Results({ result, onHome, onReview, onAgain }: Props) {
 
       <ul className={styles.meta}>
         <li>
-          <span>XP gained</span>
-          <strong>+{result.xpGained}</strong>
-        </li>
-        <li>
           <span>Accuracy</span>
           <strong>
             {result.correct}/{result.total}
@@ -39,10 +37,43 @@ export function Results({ result, onHome, onReview, onAgain }: Props) {
           <strong>×{Math.max(1, result.comboPeak)}</strong>
         </li>
         <li>
+          <span>Heats finished</span>
+          <strong>{result.runsCompleted}</strong>
+        </li>
+        <li>
           <span>Level</span>
           <strong>{LEVEL_LABELS[result.unlockedLevel]}</strong>
         </li>
       </ul>
+
+      <div className={styles.levelProgress}>
+        {progress.done ? (
+          <p className={styles.levelProgressText}>
+            You’re on <strong>Advanced</strong> — all levels unlocked.
+          </p>
+        ) : (
+          <>
+            <div className={styles.levelProgressHead}>
+              <span>
+                Next: <strong>{progress.nextLabel}</strong>
+              </span>
+              <span>
+                {progress.have}/{progress.need} heats
+              </span>
+            </div>
+            <div className={styles.levelTrack} aria-hidden>
+              <div
+                className={styles.levelFill}
+                style={{ width: `${Math.round(progress.ratio * 100)}%` }}
+              />
+            </div>
+            <p className={styles.levelProgressText}>
+              {progress.remaining} more heat
+              {progress.remaining === 1 ? '' : 's'} to unlock {progress.nextLabel}.
+            </p>
+          </>
+        )}
+      </div>
 
       {leveledUp && (
         <p className={styles.unlock}>

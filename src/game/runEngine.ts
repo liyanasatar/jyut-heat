@@ -6,7 +6,10 @@ import {
   type Phrase,
   type Scene,
 } from '../data/content'
-import { levelsAvailable } from './scoring'
+import { levelsAvailable, unlockedLevel } from './scoring'
+
+const RECENT_KEY = 'jyut-heat-recent-phrases-v1'
+const RECENT_LIMIT = 40
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr]
@@ -17,22 +20,76 @@ function shuffle<T>(arr: T[]): T[] {
   return a
 }
 
+function loadRecentIds(): string[] {
+  try {
+    const raw = localStorage.getItem(RECENT_KEY)
+    if (!raw) return []
+    const parsed = JSON.parse(raw) as string[]
+    return Array.isArray(parsed) ? parsed : []
+  } catch {
+    return []
+  }
+}
+
+function saveRecentIds(ids: string[]): void {
+  const prev = loadRecentIds()
+  const next = [...ids, ...prev.filter((id) => !ids.includes(id))].slice(
+    0,
+    RECENT_LIMIT,
+  )
+  localStorage.setItem(RECENT_KEY, JSON.stringify(next))
+}
+
 function familyBiasScore(p: Phrase | Scene): number {
   const hits = p.tags.filter((t) => FAMILY_TAGS.includes(t)).length
-  return hits + (Math.random() * 0.4)
+  const trendyBonus = p.tags.includes('trendy') ? 0.35 : 0
+  return hits + trendyBonus + Math.random() * 0.5
 }
 
 export function phrasesForLevels(levels: Level[]): Phrase[] {
   return phrases.filter((p) => levels.includes(p.level))
 }
 
-/** Prefer family/home/food/marriage/friends tags when building a run */
-export function pickRunPhrases(totalXp: number, count: number): Phrase[] {
-  const levels = levelsAvailable(totalXp)
+/** Prefer current level + less-recently-seen phrases so runs feel fresher */
+export function pickRunPhrases(runsCompleted: number, count: number): Phrase[] {
+  const levels = levelsAvailable(runsCompleted)
+  const maxLevel = unlockedLevel(runsCompleted)
   const pool = phrasesForLevels(levels)
-  const ranked = [...pool].sort((a, b) => familyBiasScore(b) - familyBiasScore(a))
-  const biased = ranked.slice(0, Math.ceil(ranked.length * 0.85))
-  return shuffle(biased).slice(0, Math.min(count, biased.length))
+  const recent = new Set(loadRecentIds())
+
+  const currentLevel = pool.filter((p) => p.level === maxLevel)
+  const lowerLevel = pool.filter((p) => p.level !== maxLevel)
+
+  const rank = (list: Phrase[]) =>
+    [...list].sort((a, b) => {
+      const aRecent = recent.has(a.id) ? 1 : 0
+      const bRecent = recent.has(b.id) ? 1 : 0
+      if (aRecent !== bRecent) return aRecent - bRecent
+      return familyBiasScore(b) - familyBiasScore(a)
+    })
+
+  const wantCurrent = Math.ceil(count * 0.7)
+  const wantLower = count - wantCurrent
+
+  const pickedCurrent = rank(currentLevel).slice(
+    0,
+    Math.min(wantCurrent, currentLevel.length),
+  )
+  const pickedLower = rank(lowerLevel).slice(
+    0,
+    Math.min(wantLower, lowerLevel.length),
+  )
+
+  let picked = [...pickedCurrent, ...pickedLower]
+
+  if (picked.length < count) {
+    const remaining = rank(pool.filter((p) => !picked.some((x) => x.id === p.id)))
+    picked = [...picked, ...remaining.slice(0, count - picked.length)]
+  }
+
+  picked = shuffle(picked).slice(0, Math.min(count, picked.length))
+  saveRecentIds(picked.map((p) => p.id))
+  return picked
 }
 
 export function pickDistractors(correct: Phrase, pool: Phrase[], n = 3): Phrase[] {
@@ -59,18 +116,17 @@ export function buildOptions(correct: Phrase, pool: Phrase[]): Phrase[] {
   return shuffle([correct, ...pickDistractors(correct, pool, 3)])
 }
 
-export function pickScene(totalXp: number, usedIds: Set<string>): Scene | null {
-  const levels = levelsAvailable(totalXp)
+export function pickScene(runsCompleted: number, usedIds: Set<string>): Scene | null {
+  const levels = levelsAvailable(runsCompleted)
   const pool = scenes
     .filter((s) => levels.includes(s.level) && !usedIds.has(s.id))
     .sort((a, b) => familyBiasScore(b) - familyBiasScore(a))
   if (!pool.length) return null
-  return shuffle(pool.slice(0, Math.min(6, pool.length)))[0] ?? null
+  return shuffle(pool.slice(0, Math.min(8, pool.length)))[0] ?? null
 }
 
 export function shuffleChunks(chunks: string[]): string[] {
   let out = shuffle(chunks)
-  // avoid starting already solved
   if (out.length > 1 && out.every((c, i) => c === chunks[i])) {
     out = shuffle(chunks)
   }

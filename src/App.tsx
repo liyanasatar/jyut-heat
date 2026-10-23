@@ -31,7 +31,6 @@ export default function App() {
   const onFinish = useCallback(
     (partial: {
       score: number
-      xpGained: number
       comboPeak: number
       correct: number
       total: number
@@ -39,7 +38,6 @@ export default function App() {
     }) => {
       const { progress: next, result } = applyRunEnd(progress, {
         score: partial.score,
-        xpGained: partial.xpGained,
         missedIds: partial.missedIds,
       })
       setProgress(next)
@@ -68,7 +66,7 @@ export default function App() {
       {screen === 'run' && (
         <Run
           key={runKey}
-          totalXp={progress.totalXp}
+          runsCompleted={progress.runsCompleted}
           onFinish={onFinish}
           onQuit={() => setScreen('home')}
         />
@@ -94,7 +92,7 @@ export default function App() {
 
       {screen === 'levels' && (
         <Levels
-          totalXp={progress.totalXp}
+          runsCompleted={progress.runsCompleted}
           onBack={() => setScreen('home')}
         />
       )}

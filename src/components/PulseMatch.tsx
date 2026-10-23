@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import type { Phrase } from '../data/content'
 import { PULSE_MS } from '../game/scoring'
+import { EmojiBurst } from './EmojiBurst'
 import styles from './PulseMatch.module.css'
 
-const FEEDBACK_OK_MS = 450
-const FEEDBACK_MISS_MS = 2200
+const FEEDBACK_OK_MS = 1200
+const FEEDBACK_MISS_MS = 4200
 
 type Props = {
   phrase: Phrase
@@ -16,6 +17,7 @@ type Props = {
 export function PulseMatch({ phrase, options, combo, onAnswer }: Props) {
   const [feedback, setFeedback] = useState<'idle' | 'correct' | 'miss'>('idle')
   const [locked, setLocked] = useState(false)
+  const [burstKey, setBurstKey] = useState(0)
   const startRef = useRef(Date.now())
   const answeredRef = useRef(false)
 
@@ -29,6 +31,7 @@ export function PulseMatch({ phrase, options, combo, onAnswer }: Props) {
       if (answeredRef.current) return
       answeredRef.current = true
       setFeedback('miss')
+      setBurstKey((k) => k + 1)
       setLocked(true)
       window.setTimeout(() => onAnswer(false, PULSE_MS), FEEDBACK_MISS_MS)
     }, PULSE_MS)
@@ -43,6 +46,7 @@ export function PulseMatch({ phrase, options, combo, onAnswer }: Props) {
     const elapsed = Date.now() - startRef.current
     const ok = opt.id === phrase.id
     setFeedback(ok ? 'correct' : 'miss')
+    setBurstKey((k) => k + 1)
     window.setTimeout(
       () => onAnswer(ok, elapsed),
       ok ? FEEDBACK_OK_MS : FEEDBACK_MISS_MS,
@@ -53,6 +57,11 @@ export function PulseMatch({ phrase, options, combo, onAnswer }: Props) {
     <div
       className={`${styles.wrap} anim-snap ${feedback === 'miss' ? 'anim-shake' : ''}`}
     >
+      <EmojiBurst
+        kind={feedback === 'idle' ? null : feedback === 'correct' ? 'good' : 'miss'}
+        burstKey={`${phrase.id}-${burstKey}`}
+      />
+
       <p className={styles.promptLabel}>How do you say this in Cantonese?</p>
       <h2 className={styles.prompt}>{phrase.en}</h2>
 
@@ -64,9 +73,25 @@ export function PulseMatch({ phrase, options, combo, onAnswer }: Props) {
         />
       </div>
 
-      {combo > 1 && (
+      {combo > 1 && feedback === 'idle' && (
         <div key={combo} className={`${styles.combo} anim-combo`}>
           ×{Math.min(5, combo)} combo
+        </div>
+      )}
+
+      {feedback === 'correct' && (
+        <div className={styles.goodBanner} aria-live="polite">
+          <p className={styles.goodLabel}>Correct</p>
+          <p className={styles.goodZh}>{phrase.zh}</p>
+          <p className={styles.goodRoman}>{phrase.jyutping}</p>
+        </div>
+      )}
+
+      {feedback === 'miss' && (
+        <div className={styles.missBanner} aria-live="polite">
+          <p className={styles.missLabel}>Correct answer</p>
+          <p className={styles.missZh}>{phrase.zh}</p>
+          <p className={styles.missRoman}>{phrase.jyutping}</p>
         </div>
       )}
 
@@ -92,6 +117,7 @@ export function PulseMatch({ phrase, options, combo, onAnswer }: Props) {
               onClick={() => choose(opt)}
               disabled={locked}
             >
+              <span className={styles.zh}>{opt.zh}</span>
               <span className={styles.roman}>{opt.jyutping}</span>
             </button>
           )

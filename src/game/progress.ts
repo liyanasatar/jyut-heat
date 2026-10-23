@@ -1,7 +1,7 @@
 import type { Level } from '../data/content'
 import { unlockedLevel } from './scoring'
 
-const KEY = 'jyut-heat-progress-v1'
+const KEY = 'jyut-heat-progress-v2'
 
 export type ReviewItem = {
   phraseId: string
@@ -9,7 +9,6 @@ export type ReviewItem = {
 }
 
 export type Progress = {
-  totalXp: number
   bestScore: number
   streakDays: number
   lastPlayDate: string | null
@@ -19,7 +18,6 @@ export type Progress = {
 
 export type RunResult = {
   score: number
-  xpGained: number
   comboPeak: number
   correct: number
   total: number
@@ -27,10 +25,10 @@ export type RunResult = {
   addedToReview: string[]
   unlockedLevel: Level
   previousLevel: Level
+  runsCompleted: number
 }
 
 const defaultProgress = (): Progress => ({
-  totalXp: 0,
   bestScore: 0,
   streakDays: 0,
   lastPlayDate: null,
@@ -50,10 +48,26 @@ function yesterdayKey(): string {
 
 export function loadProgress(): Progress {
   try {
-    const raw = localStorage.getItem(KEY)
-    if (!raw) return defaultProgress()
-    const parsed = JSON.parse(raw) as Progress
-    return { ...defaultProgress(), ...parsed, review: parsed.review ?? [] }
+    const rawV2 = localStorage.getItem(KEY)
+    if (rawV2) {
+      const parsed = JSON.parse(rawV2) as Progress
+      return { ...defaultProgress(), ...parsed, review: parsed.review ?? [] }
+    }
+    // migrate from v1 (XP-based) if present
+    const rawV1 = localStorage.getItem('jyut-heat-progress-v1')
+    if (rawV1) {
+      const old = JSON.parse(rawV1) as Progress & { totalXp?: number }
+      const migrated: Progress = {
+        bestScore: old.bestScore ?? 0,
+        streakDays: old.streakDays ?? 0,
+        lastPlayDate: old.lastPlayDate ?? null,
+        review: old.review ?? [],
+        runsCompleted: old.runsCompleted ?? 0,
+      }
+      saveProgress(migrated)
+      return migrated
+    }
+    return defaultProgress()
   } catch {
     return defaultProgress()
   }
@@ -67,11 +81,10 @@ export function applyRunEnd(
   progress: Progress,
   opts: {
     score: number
-    xpGained: number
     missedIds: string[]
   },
 ): { progress: Progress; result: Omit<RunResult, 'comboPeak' | 'correct' | 'total'> } {
-  const previousLevel = unlockedLevel(progress.totalXp)
+  const previousLevel = unlockedLevel(progress.runsCompleted)
   const today = todayKey()
   let streakDays = progress.streakDays
 
@@ -94,7 +107,6 @@ export function applyRunEnd(
 
   const newBest = opts.score > progress.bestScore
   const next: Progress = {
-    totalXp: progress.totalXp + opts.xpGained,
     bestScore: Math.max(progress.bestScore, opts.score),
     streakDays,
     lastPlayDate: today,
@@ -108,11 +120,11 @@ export function applyRunEnd(
     progress: next,
     result: {
       score: opts.score,
-      xpGained: opts.xpGained,
       newBest,
       addedToReview,
-      unlockedLevel: unlockedLevel(next.totalXp),
+      unlockedLevel: unlockedLevel(next.runsCompleted),
       previousLevel,
+      runsCompleted: next.runsCompleted,
     },
   }
 }

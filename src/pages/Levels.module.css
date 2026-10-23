@@ -90,4 +90,11 @@
 .roman {
   font-family: var(--font-display);
   font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.zh {
+  font-family: var(--font-zh);
+  font-weight: 700;
 }

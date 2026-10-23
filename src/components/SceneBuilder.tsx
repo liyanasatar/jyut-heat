@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { Scene } from '../data/content'
 import { shuffleChunks } from '../game/runEngine'
+import { EmojiBurst } from './EmojiBurst'
 import styles from './SceneBuilder.module.css'
 
 type Props = {
@@ -12,6 +13,7 @@ export function SceneBuilder({ scene, onSolved }: Props) {
   const [bank, setBank] = useState(() => shuffleChunks(scene.chunks))
   const [built, setBuilt] = useState<string[]>([])
   const [feedback, setFeedback] = useState<'idle' | 'correct' | 'miss'>('idle')
+  const [burstKey, setBurstKey] = useState(0)
 
   useEffect(() => {
     setBank(shuffleChunks(scene.chunks))
@@ -36,13 +38,19 @@ export function SceneBuilder({ scene, onSolved }: Props) {
     if (built.length !== scene.chunks.length || feedback !== 'idle') return
     const ok = built.every((c, i) => c === scene.chunks[i])
     setFeedback(ok ? 'correct' : 'miss')
-    window.setTimeout(() => onSolved(ok), ok ? 500 : 2200)
+    setBurstKey((k) => k + 1)
+    window.setTimeout(() => onSolved(ok), ok ? 1200 : 4200)
   }
 
   return (
     <div
       className={`${styles.wrap} anim-snap ${feedback === 'miss' ? 'anim-shake' : ''}`}
     >
+      <EmojiBurst
+        kind={feedback === 'idle' ? null : feedback === 'correct' ? 'good' : 'miss'}
+        burstKey={`${scene.id}-${burstKey}`}
+      />
+
       <p className={styles.eyebrow}>Scene · Build the line</p>
       <h2 className={styles.prompt}>{scene.en}</h2>
 
@@ -87,10 +95,18 @@ export function SceneBuilder({ scene, onSolved }: Props) {
       </button>
 
       {feedback === 'correct' && (
-        <p className={styles.ok}>Nice — {scene.jyutping}</p>
+        <p className={styles.ok}>
+          <span className={styles.feedbackLabel}>Correct</span>
+          {scene.zh}
+          <span className={styles.okRoman}>{scene.jyutping}</span>
+        </p>
       )}
       {feedback === 'miss' && (
-        <p className={styles.bad}>Almost — {scene.jyutping}</p>
+        <p className={styles.bad}>
+          <span className={styles.feedbackLabel}>Correct answer</span>
+          {scene.zh}
+          <span className={styles.okRoman}>{scene.jyutping}</span>
+        </p>
       )}
     </div>
   )
