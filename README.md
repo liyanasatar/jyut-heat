@@ -4,6 +4,8 @@ A short browser game for everyday Cantonese. You get an English prompt, you pick
 
 The word list leans toward family, food, home, and talking with in-laws — the Cantonese you actually want on the tip of your tongue.
 
+**Play it:** [liyanasatar.github.io/jyut-heat](https://liyanasatar.github.io/jyut-heat/)
+
 <p align="center">
   <img src="docs/screenshots/home.jpg" width="250" alt="Jyut Heat home screen, a neon Hong Kong street with a Start Heat button">
   <img src="docs/screenshots/match.png" width="250" alt="A timed round asking how to say I'm hungry, with four Cantonese choices">
@@ -46,7 +48,7 @@ Open the **Network** address Vite prints. Leave the terminal running while you p
 | `npm run build` | Typecheck and production build |
 | `npm run preview` | Play the production build |
 
-GitHub Pages publishes a playable copy from `main`. The link shows up on the repo once the first deploy finishes.
+The same game is published at [liyanasatar.github.io/jyut-heat](https://liyanasatar.github.io/jyut-heat/). That copy updates whenever `main` changes.
 
 ## How it's built
 
